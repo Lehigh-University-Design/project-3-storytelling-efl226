@@ -271,7 +271,7 @@
         
         /* state animations and interactions */
         
-        .choice-button { display: block; width: 100%; text-align: left; padding: 0.75rem 1rem; margin-top: 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.2); background-color: rgba(255, 255, 255, 0.05); transition: all 0.3s ease; cursor: pointer; }
+        .choice-button { display: block; width: 100%; text-align: left; padding: 0.75rem 1rem; margin-top: 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.2); background-color: rgba(255, 255, 255, 0.05); transition: all 0.3s ease; cursor: pointer; color: #d1d5db;  }
         .choice-button:hover { background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); }
         .choice-button.active { background-color: #22d3ee; color: #0a0a0a; border-color: #22d3ee; font-weight: 500; }
         #product-name-input { display: block; width: 100%; margin-top: 1.5rem; background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; font-size: 1.125rem; transition: all 0.3s ease; }
