@@ -16,7 +16,7 @@
             const productNameInput = document.getElementById('product-name-input');
             
            
-            const IMAGE_BASE_URL = 'project-3-storytelling-efl226/images'; 
+            const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/Lehigh-University-Design/project-3-storytelling-efl226/main/images/'; 
             
             // Description elements and map
             const descCasing = document.getElementById('desc-casing');
