@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
             const introHeader = document.getElementById('intro-header'); 
             const stickyCanvas = document.getElementById('sticky-canvas'); 
             const stickyNav = document.getElementById('sticky-nav'); 
@@ -15,9 +15,9 @@
             const choiceButtons = document.querySelectorAll('.choice-button');
             const productNameInput = document.getElementById('product-name-input');
             
-           
+            // The absolute URL to the image directory
             const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/Lehigh-University-Design/project-3-storytelling-efl226/main/images/'; 
-            
+
             // Description elements and map
             const descCasing = document.getElementById('desc-casing');
             const descCushion = document.getElementById('desc-cushion');
@@ -26,19 +26,20 @@
             const descriptionMap = {
                 bamboo: "Warm, natural acoustics from sustainable bamboo.",
                 aluminum: "A sleek, durable shell of brushed aluminum.",
-                leather: "Breathable Black Cotton for lightweight, cool comfort.",
-                fabric: "Ultra-light and robust carbon fiber framework.", 
+                cotton: "Breathable Black Cotton for lightweight, cool comfort.",
+                carbon: "Ultra-light and robust carbon fiber framework.", 
                 clarity: "A precision driver tuned for studio-grade clarity.",
                 bass: "A custom driver built for deep, rich bass."
             };
 
-            // store the user's configuration
+            // To store the user's configuration
             let userChoices = {
-                model: null, 
+                // Initialize with 'studio' so an image shows immediately on scroll
+                model: 'studio', 
                 casing: null,
                 cushion: null,
                 driver: null,
-                name: 'Resonant Design',
+                name: 'Base Model',
                 vibe: null
             };
 
@@ -53,7 +54,11 @@
 
             // Helper to set image source and handle loading/errors
             function loadImage(imgElement, filename) {
-                const newSrc = IMAGE_BASE_URL + filename;
+                const normalizedFilename = filename.toLowerCase(); 
+                const newSrc = IMAGE_BASE_URL + normalizedFilename;
+                
+                // console.log('Loading:', newSrc); // Debug
+
                 if (imgElement.src !== newSrc) {
                     imgElement.style.opacity = 0;
                     imgElement.onload = () => {
@@ -72,56 +77,77 @@
             // Function to manage all visible images based on current scene and choices
             function updateDisplayImages(currentScene) {
                 const { model, casing, cushion, driver } = userChoices;
-
-                // Hide all images first
-                allModelImages.forEach(img => img.style.opacity = 0);
-
-                if (currentScene < 5) { // Scenes 2, 3, 4: Show headphone model
+                
+                
+                if (model) {
                     let filename = '';
-                    if (!model) {
-                        return; 
-                    } else if (currentScene >= 4 && cushion && casing) {
-                        filename = `${model}-${casing}-${cushion}.png`;
-                    } else if (currentScene >= 3 && casing) {
-                        filename = `${model}-${casing}.png`;
+                    
+                 
+                    if (cushion && casing) {
+                         // Full build available
+                         filename = `${model}-${casing}-${cushion}.png`;
+                         
+                         
+                         if (currentScene === 3) {
+                             filename = `${model}-${casing}.png`;
+                         } else if (currentScene === 2) {
+                             filename = `${model}-base.png`;
+                         }
+                         // For Scene 4, 5, 6, 7, 8 -> show full build
+                    } else if (casing) {
+                         // Casing available
+                         if (currentScene === 2) {
+                             filename = `${model}-base.png`;
+                         } else {
+                             // Scene 3+
+                             filename = `${model}-${casing}.png`;
+                         }
                     } else {
+                        // Only base model available
                         filename = `${model}-base.png`;
                     }
+                    
                     loadImage(headphoneImage, filename);
-                } else { // Scene 5 Driver and onwards: Show driver background
+                    // Ensure headphone is visible
+                    headphoneImage.style.opacity = 1; 
+                }
+
+                // 2. BACKGROUND LOGIC (Driver Section)
+                // Default: Hide backgrounds
+                bassBackgroundImage.style.opacity = 0;
+                clarityBackgroundImage.style.opacity = 0;
+
+                // Show background only if in Driver scene (5) or later AND driver is selected
+                if (currentScene >= 5 && driver) {
                     if (driver === 'bass') {
                         loadImage(bassBackgroundImage, 'bass-background.png');
+                        bassBackgroundImage.style.opacity = 1; // Explicitly show
                     } else if (driver === 'clarity') {
                         loadImage(clarityBackgroundImage, 'clarity-background.png');
-                    } else {
-                        // Optionally show a default driver image or keep all hidden
+                         clarityBackgroundImage.style.opacity = 1; // Explicitly show
                     }
                 }
             }
 
 
-            //  updates all the text in the final summary and the navigation title 
+            // This function updates all the text in the final summary AND the navigation title 
             function updateSummaryText() {
                 const productName = userChoices.name || "Resonant Design Build";
                 summaryName.textContent = productName;
-                navTitle.textContent = productName; // Update the header title 
+                navTitle.textContent = productName; 
 
                 summaryCasing.textContent = userChoices.casing ? (userChoices.casing === 'bamboo' ? 'Sustainable Bamboo' : 'Brushed Aluminum') : '...';
-                
-                summaryCushion.textContent = userChoices.cushion ? (userChoices.cushion === 'leather' ? 'Breathable Black Cotton' : 'Carbon Fiber') : '...';
-                
+                summaryCushion.textContent = userChoices.cushion ? (userChoices.cushion === 'cotton' ? 'Breathable Black Cotton' : 'Carbon Fiber') : '...';
                 summaryDriver.textContent = userChoices.driver ? (userChoices.driver === 'clarity' ? 'Studio Clarity' : 'Deep Bass') : '...';
 
                 let slogan = "A sound that is uniquely yours."; 
                 let body = `Introducing the new ${productName}. Designed by you.`; 
                 const { model, vibe } = userChoices; 
                 
-                // Fallback for cases where a model/vibe hasn't been chosen yet
                 if (!model || !vibe) {
                      slogan = "Your unique campaign awaits..."; 
                      body = "Make your selections above to generate your custom brand story and advertisement."
                 }
-                // Dynamic Slogan/Body generation based on Model and Vibe choices
                 else if (model === 'studio' && vibe === 'minimal') { slogan = "Pure. Uncompromising. Yours."; body = `For the listener who hears everything. The Studio (Over-Ear) delivers sound as it was intended. No distortion. No compromise.`; } 
                 else if (model === 'studio' && vibe === 'bold') { slogan = "Hear the Revolution."; body = `Don't just listen to music. Feel it. The Studio (Over-Ear) with the Deep Bass driver is a statement.`; } 
                 else if (model === 'studio' && vibe === 'eco') { slogan = "Natural Sound. Natural Materials."; body = `True-to-life audio from sustainable materials. The Studio (Over-Ear) connects you to your music and the planet.`; } 
@@ -133,7 +159,7 @@
                 adBody.textContent = body;
             }
 
-            //click listeners to all choice buttons
+            // Click listeners
             choiceButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const choice = button.dataset.choice; 
@@ -147,38 +173,34 @@
                     });
                     button.classList.add('active');
 
-                    
                     if (choice === 'casing') {
                         descCasing.innerHTML = descriptionMap[value] || '';
                     } else if (choice === 'cushion') {
-                        descCushion.innerHTML = descriptionMap[value] || '';
+                        descCushion.innerHTML = descriptionMap[value] || ''; 
                     } else if (choice === 'driver') {
                         descDriver.innerHTML = descriptionMap[value] || '';
                     }
 
-                    // Update the image based on the new choice
-                    updateDisplayImages(sceneNumber);
+                    updateDisplayImages(sceneNumber); 
                     updateSummaryText();
                 });
             });
 
-            //listener for the name input
+            // Name input listener
             productNameInput.addEventListener('input', (e) => {
                 userChoices.name = e.target.value;
                 updateSummaryText();
             });
             
-            
+            // Scroll Logic
             let hasScrolledOnce = false;
             window.addEventListener('scroll', () => {
-                // If user scrolls past 50px which will be the intro scene
                 if (window.scrollY > 50 && !hasScrolledOnce) {
                     introHeader.classList.add('hidden');
                     stickyCanvas.classList.add('model-active');
                     stickyNav.classList.add('visible'); 
                     hasScrolledOnce = true;
                 } 
-                // If user scrolls back to the top
                 else if (window.scrollY <= 50 && hasScrolledOnce) {
                     introHeader.classList.remove('hidden');
                     stickyCanvas.classList.remove('model-active');
@@ -186,18 +208,14 @@
                     hasScrolledOnce = false; 
                 } 
 
-        
-                //current visible scene based on scroll position
                 let currentScene = 0;
                 scenes.forEach(scene => {
                     const rect = scene.getBoundingClientRect();
-                    // If the scene's top is visible 
                     if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
                         currentScene = parseInt(scene.dataset.scene);
                     }
                 });
 
-                //scene text visibility
                 scenes.forEach(scene => {
                     const sceneNumber = parseInt(scene.dataset.scene);
                     const textContent = scene.querySelector('.text-content');
@@ -208,42 +226,32 @@
                     }
                 });
                 
-                //description visibility and image display
                 allDescriptions.forEach(desc => desc.classList.remove('visible'));
 
                 if (currentScene === 3 && userChoices.casing) {
                     descCasing.classList.add('visible');
                 } else if (currentScene === 4 && userChoices.cushion) {
                     descCushion.classList.add('visible');
-                } else if ((currentScene === 5 || currentScene === 8) && userChoices.driver) { // Show driver desc on scene 5 and 8
+                } else if ((currentScene === 5 || currentScene === 8) && userChoices.driver) {
                     descDriver.classList.add('visible');
                 }
                 
-                //Update the model image based on the current scene
                 updateDisplayImages(currentScene);
                 
-                //Update headset model rotation based on scene
                 const modelElement = document.getElementById('headphone-model');
                 
                 if (currentScene === 2) {
-                   
                     modelElement.style.transform = 'rotateY(0deg) rotateX(0deg)';
                 } else if (currentScene === 3) {
-                    
                     modelElement.style.transform = 'rotateY(15deg) rotateX(5deg)';
                 } else if (currentScene === 4) {
-                    
                     modelElement.style.transform = 'rotateY(-15deg) rotateX(10deg)';
                 } else {
-                   
                     modelElement.style.transform = 'rotateY(0deg) rotateX(0deg)';
                 }
-
             });
             
-            
             updateSummaryText();
-            
             
             navButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
@@ -261,10 +269,8 @@
                 });
             });
             
-           
             resetButton.addEventListener('click', () => {
-                userChoices = { model: null, casing: null, cushion: null, driver: null, name: 'Aura One', vibe: null };
-                
+                userChoices = { model: 'studio', casing: null, cushion: null, driver: null, name: 'Aura One', vibe: null };
                 
                 document.querySelectorAll('.choice-button.active').forEach(btn => btn.classList.remove('active'));
                 productNameInput.value = 'Aura One';
@@ -274,20 +280,17 @@
                     desc.innerHTML = '';
                 });
                 
-                //Hide all images
                 allModelImages.forEach(img => {
                     img.style.opacity = 0;
                     img.src = '';
                 });
 
-                //Scroll to the beginning
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                //Re-trigger the scroll handler to reset the header/intro state immediately
                 window.dispatchEvent(new Event('scroll'));
-
-                
                 updateSummaryText();
+                
+                // Re-init images after reset
+                updateDisplayImages(2);
             });
 
             window.dispatchEvent(new Event('scroll')); 
@@ -295,4 +298,6 @@
             bassBackgroundImage.src = IMAGE_BASE_URL + 'bass-background.png';
             clarityBackgroundImage.src = IMAGE_BASE_URL + 'clarity-background.png';
             
+            // Force initial update to show default headphone
+            updateDisplayImages(2);
         });

@@ -12,7 +12,7 @@
         }
         
         h1, h2, h3 {
-            font-family: 'EB Garamond', serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Navigation */
@@ -42,7 +42,7 @@
         }
 
         #nav-title {
-            font-family: 'EB Garamond', serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.125rem; 
             font-weight: 500;
             color: #22d3ee;
@@ -162,8 +162,8 @@
         
         #headphone-model {
             position: relative;
-            width: 20rem; 
-            height: 20rem; 
+            width: 30rem; 
+            height: 40rem; 
             transform-style: preserve-3d;
             transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex;
@@ -172,13 +172,24 @@
         }
         
         
-        #headphone-image, #bass-background-image, #clarity-background-image { 
+        #headphone-image  { 
             position: absolute; 
             width: 100%;
             height: 100%;
             object-fit: contain; 
             transition: opacity 0.5s ease-in-out;
             opacity: 0; 
+            z-index: 10;
+        }
+        
+        #bass-background-image, #clarity-background-image{
+            position: absolute; 
+            width: 200%;
+            height: 200%;
+            object-fit: contain; 
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0; 
+            z-index: 1;
         }
 
        
@@ -274,7 +285,7 @@
         .choice-button { display: block; width: 100%; text-align: left; padding: 0.75rem 1rem; margin-top: 0.75rem; border-radius: 0.5rem; border: 1px solid rgba(255, 255, 255, 0.2); background-color: rgba(255, 255, 255, 0.05); transition: all 0.3s ease; cursor: pointer; color: #d1d5db;  }
         .choice-button:hover { background-color: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); }
         .choice-button.active { background-color: #22d3ee; color: #0a0a0a; border-color: #22d3ee; font-weight: 500; }
-        #product-name-input { display: block; width: 100%; margin-top: 1.5rem; background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; font-size: 1.125rem; transition: all 0.3s ease; }
+        #product-name-input { display: block; width: 90%; margin-top: 1.5rem; background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.5rem; padding: 0.75rem 1rem; color: white; font-size: 1.125rem; transition: all 0.3s ease; }
         #product-name-input:focus { outline: none; border-color: #22d3ee; background-color: rgba(0, 0, 0, 0.2); }
         #mock-ad { margin-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 1.5rem; }
         #ad-slogan { font-family: 'EB Garamond', serif; font-size: 2.25rem; font-weight: 500; color: white; line-height: 1.2; }
